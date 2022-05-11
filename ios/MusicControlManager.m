@@ -30,6 +30,7 @@
     @"discNumber": MPMediaItemPropertyDiscNumber, \
     @"genre": MPMediaItemPropertyGenre, \
     @"persistentID": MPMediaItemPropertyPersistentID, \
+    @"externalContentID": MPNowPlayingInfoPropertyExternalContentIdentifier, \
     @"duration": MPMediaItemPropertyPlaybackDuration, \
     @"title": MPMediaItemPropertyTitle, \
     @"elapsedTime": MPNowPlayingInfoPropertyElapsedPlaybackTime, \
