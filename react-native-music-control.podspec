@@ -13,7 +13,8 @@ Pod::Spec.new do |s|
   s.source         = { git: 'git://github.com/tanguyantoine/react-native-music-control.git', tag: s.version }
 
   s.requires_arc   = true
-  s.platform       = :ios, '8.0'
+  s.platforms = { :ios => "8.0", :tvos => "12.4" }
+
 
   s.preserve_paths = 'LICENSE', 'README.md', 'package.json', 'index.js'
   s.source_files   = 'ios/*.{h,m}'
