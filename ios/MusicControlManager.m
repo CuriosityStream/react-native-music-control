@@ -86,22 +86,25 @@ RCT_EXPORT_METHOD(updatePlayback:(NSDictionary *) originalDetails)
         [details setValue:speed forKey:MEDIA_SPEED];
     }
     if ([state isEqual:MEDIA_STATE_STOPPED]) {
-        MPRemoteCommandCenter *remoteCenter = [MPRemoteCommandCenter sharedCommandCenter];
-        [self toggleHandler:remoteCenter.stopCommand withSelector:@selector(onStop:) enabled:false];
-    }
-
+         MPRemoteCommandCenter *remoteCenter = [MPRemoteCommandCenter sharedCommandCenter];
+         [self toggleHandler:remoteCenter.stopCommand withSelector:@selector(onStop:) enabled:false];
+     }
+    
     NSMutableDictionary *mediaDict = [[NSMutableDictionary alloc] initWithDictionary: center.nowPlayingInfo];
 
     center.nowPlayingInfo = [self update:mediaDict with:details andSetDefaults:false];
-
-    // Playback state is separated in 11+
-    if (@available(iOS 11.0, *)) {
-        if ([state isEqual:MEDIA_STATE_PLAYING]) {
-            center.playbackState = MPNowPlayingPlaybackStatePlaying;
-        } else if ([state isEqual:MEDIA_STATE_PAUSED]) {
-            center.playbackState = MPNowPlayingPlaybackStatePaused;
-        } else if ([state isEqual:MEDIA_STATE_STOPPED]) {
-            center.playbackState = MPNowPlayingPlaybackStateStopped;
+    
+    // tvos do not support playbackstate proprety
+    if(TARGET_OS_IOS) {
+        // Playback state is separated in 11+
+        if (@available(iOS 11.0, *)) {
+            if ([state isEqual:MEDIA_STATE_PLAYING]) {
+                center.playbackState = MPNowPlayingPlaybackStatePlaying;
+            } else if ([state isEqual:MEDIA_STATE_PAUSED]) {
+                center.playbackState = MPNowPlayingPlaybackStatePaused;
+            } else if ([state isEqual:MEDIA_STATE_STOPPED]) {
+                center.playbackState = MPNowPlayingPlaybackStateStopped;
+            }
         }
     }
 
@@ -401,7 +404,15 @@ RCT_EXPORT_METHOD(observeAudioInterruptions:(BOOL) observe){
             }
 
             MPNowPlayingInfoCenter *center = [MPNowPlayingInfoCenter defaultCenter];
-            MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage: image];
+            
+            MPMediaItemArtwork *artwork = nil;
+            if(@available(tvOS 10.1, *)) {
+                artwork = [[MPMediaItemArtwork alloc] initWithBoundsSize: [image size] requestHandler:^UIImage * _Nonnull (CGSize size) {
+                    return image;
+                }];
+            } else {
+                artwork = [[MPMediaItemArtwork alloc] initWithImage: image];
+            }
             NSMutableDictionary *mediaDict = (center.nowPlayingInfo != nil) ? [[NSMutableDictionary alloc] initWithDictionary: center.nowPlayingInfo] : [NSMutableDictionary dictionary];
             [mediaDict setValue:artwork forKey:MPMediaItemPropertyArtwork];
             center.nowPlayingInfo = mediaDict;
