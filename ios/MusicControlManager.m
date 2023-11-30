@@ -90,7 +90,6 @@ RCT_EXPORT_METHOD(updatePlayback:(NSDictionary *) originalDetails)
          [self toggleHandler:remoteCenter.stopCommand withSelector:@selector(onStop:) enabled:false];
      }
     
-    
     NSMutableDictionary *mediaDict = [[NSMutableDictionary alloc] initWithDictionary: center.nowPlayingInfo];
 
     center.nowPlayingInfo = [self update:mediaDict with:details andSetDefaults:false];
