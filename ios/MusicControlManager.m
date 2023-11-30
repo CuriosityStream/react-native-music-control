@@ -85,7 +85,6 @@ RCT_EXPORT_METHOD(updatePlayback:(NSDictionary *) originalDetails)
 
         [details setValue:speed forKey:MEDIA_SPEED];
     }
-
     if ([state isEqual:MEDIA_STATE_STOPPED]) {
          MPRemoteCommandCenter *remoteCenter = [MPRemoteCommandCenter sharedCommandCenter];
          [self toggleHandler:remoteCenter.stopCommand withSelector:@selector(onStop:) enabled:false];
